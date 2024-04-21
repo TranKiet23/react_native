@@ -1,13 +1,9 @@
 import React from "react";
 import {  Text, View } from "react-native";
-import { } from 'react-native'
+import Login from "../login"
 
 let MainScreen = () => {
-    return(
-        <View>
-            <Text>22222222</Text>
-        </View>
-    )
+    return <Login />
 }
 
 export default MainScreen
