@@ -35,7 +35,8 @@ const Login = () => {
         axios({method: 'post', data: {dataSubmit}}).then(res => {
             console.log(res);
         }).catch( (error)=> {
-            console.log(error.message);
+            setIsPopup(true)
+            setSerror(error.message)
         })
     }
     return (
