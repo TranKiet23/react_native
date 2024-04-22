@@ -2,13 +2,15 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-nativ
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import Popup from "../components/popup"
-import axios from "axios";
+import { loginUser } from '../api';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("")
     const [isPopup, setIsPopup] = useState(false)
     const [error, setSerror] = useState("")
-
+    const navigation = useNavigation()
 
     const   onChangeUserName = (value) => {
         setUsername(value)
@@ -27,16 +29,23 @@ const Login = () => {
             setSerror("Please input login info")
             return
         }
+        signin()
+      
+    }
+    const signin = async () => {
         const dataSubmit = {
-            url: 'https://gw.nissin.dev.meksmart.com/auth/api/login',
             email : username,
             password: password
         }
-        axios({method: 'post', data: {dataSubmit}}).then(res => {
-            console.log(res);
-        }).catch( (error)=> {
+        await loginUser(dataSubmit)
+        .then((res) => {
+            AsyncStorage.setItem("token", res.data.data.token);
+            navigation.navigate("Home")
+
+        })
+        .catch((error) => {
             setIsPopup(true)
-            setSerror(error.message)
+            setSerror(error.response.data.error.message || error.message)
         })
     }
     return (
