@@ -1,12 +1,13 @@
 import React from 'react'
+import { View, Text } from 'react-native'
 
 function Settings() {
   return (
-    <div>
-      <span>
+    <View>
+      <Text>
         Settings
-      </span>
-    </div>
+      </Text>
+    </View>
   )
 }
 

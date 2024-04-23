@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback,KeyboardAvoidingView, Platform } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import Popup from "../components/popup"
@@ -49,7 +49,11 @@ const Login = () => {
         })
     }
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding"
+        >
+  
         <Popup message={error} isPopup={isPopup} onHide={showPopup} />
             <View style={styles.wrapContainer}>
 
@@ -168,7 +172,7 @@ const Login = () => {
                     </View>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 };
 

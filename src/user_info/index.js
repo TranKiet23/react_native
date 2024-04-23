@@ -11,7 +11,6 @@ function UserInfo() {
     const getDataDefault = async () => {
       await getProfiles(token)
         .then((res) => {
-          console.log("🚀 ~ .then ~ res:", res)
           setProfiles(res.data.data)
         })
         .catch((error) => {
