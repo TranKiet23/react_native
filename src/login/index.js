@@ -2,6 +2,8 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFe
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import Popup from "../components/popup"
+import SysGlobal from "../components/global"
+
 import { loginUser } from '../api';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -11,6 +13,7 @@ const Login = () => {
     const [isPopup, setIsPopup] = useState(false)
     const [error, setSerror] = useState("")
     const navigation = useNavigation()
+    const [isLoading, setIsLoading] = useState(false)
 
     const   onChangeUserName = (value) => {
         setUsername(value)
@@ -33,6 +36,7 @@ const Login = () => {
       
     }
     const signin = async () => {
+        setIsLoading(true)
         const dataSubmit = {
             email : username,
             password: password
@@ -40,20 +44,21 @@ const Login = () => {
         await loginUser(dataSubmit)
         .then((res) => {
             AsyncStorage.setItem("token", res.data.data.token);
-            navigation.navigate("Home")
-
+            navigation.navigate("Home");
+            setIsLoading(false)
         })
         .catch((error) => {
             setIsPopup(true)
             setSerror(error.response.data.error.message || error.message)
-        })
+        }).finally(
+        )
     }
     return (
         <KeyboardAvoidingView
         style={styles.container}
         behavior="padding"
         >
-  
+            <SysGlobal visible={isLoading} />
         <Popup message={error} isPopup={isPopup} onHide={showPopup} />
             <View style={styles.wrapContainer}>
 

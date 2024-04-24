@@ -6,11 +6,16 @@ import { getLists, getProfiles } from '../api';
 import moment from 'moment'
 import _ from "lodash";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Popup from "../components/popup"
+import SysGlobal from "../components/global"
 function UserManage() {
   const [token, setToken] = useState('')
   const [list, setList] = useState([])
   const [profiles, setProfiles] = useState([])
   const [keySearch, setKeySearch] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [messageAlert, setMessageAlert] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const getList = async () => {
     const params = `?limit=10&page=1`
     await getLists(token, params)
@@ -25,15 +30,15 @@ function UserManage() {
       });
   };
   const getDataDefault = async () => {
+    setIsLoading(true)
     await getProfiles(token)
       .then((res) => {
         setProfiles(res.data.data)
       })
       .catch((error) => {
-
       })
       .finally(() => {
-
+        setIsLoading(false)
       });
   };
   useEffect(() => {
@@ -50,15 +55,21 @@ function UserManage() {
   }
 
   const onDelete = (id) => {
+    setShowAlert(true)
+    setMessageAlert("delete succesfully")
+
     const dataClone = _.cloneDeep(list)
     const index = dataClone.findIndex(item => item.id !== id);
     dataClone.splice(index, 1);
     setList(dataClone)
   } 
+  const onHideAlert = () => setShowAlert(false)
 
   return (
     <View>
       {/* search bar */}
+      < SysGlobal visible={isLoading} />
+      <Popup message={messageAlert} isPopup={showAlert} onHide={onHideAlert} />
       <View style={{ padding: 10 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: '#fff' }}>
           <TextInput value={keySearch} onChangeText={handleChangeSearch} style={{ flex: 1, marginLeft: 10, borderRadius: 5 }} placeholder='Enter key search' />
